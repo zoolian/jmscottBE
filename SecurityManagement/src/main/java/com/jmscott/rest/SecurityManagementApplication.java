@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SecurityManagementApplication {
 
+	// comment
 	public static void main(String[] args) {
 		SpringApplication.run(SecurityManagementApplication.class, args);
 	}
