@@ -57,6 +57,11 @@ public class JwtAuthenticationRestController {
   @Autowired
   private UserRepository userRepository;
   
+  @GetMapping
+  public ResponseEntity<?> healthCheck() {
+	  return ResponseEntity.ok("{healthy:true}");
+  }
+  
   @PostMapping(value = "${jwt.get.token.uri}")
   public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest, HttpServletResponse response)
       throws AuthenticationException {
