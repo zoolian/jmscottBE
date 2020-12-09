@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jmscott.rest</groupId>
-	<artifactId>SecurityManagement</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>SecurityManagement</name>
+	<artifactId>jmscott-api</artifactId>
+	<version>0.1.1.RELEASE</version>
+	<name>jmscott-api</name>
 	<description>security and user management api</description>
 
 	<properties>
@@ -89,6 +89,11 @@
 		    <version>0.11.2</version>
 		    <scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.spotify</groupId>
+			<artifactId>dockerfile-maven-plugin</artifactId>
+			<version>1.4.13</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -114,6 +119,25 @@
 		        </execution>
 		      </executions>
 		    </plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<!-- <goal>push</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>zoolian/${project.artifactId}</repository>
+					<tag>${project.version}</tag>
+					<skipDockerInfo>true</skipDockerInfo>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
