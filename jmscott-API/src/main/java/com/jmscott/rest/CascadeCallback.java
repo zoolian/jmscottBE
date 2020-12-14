@@ -34,20 +34,12 @@ public class CascadeCallback implements ReflectionUtils.FieldCallback {
 			} else {
 				checkNSave(fieldValue);
 			}
-//            if (fieldValue != null) {
-//                final FieldCallback callback = new FieldCallback();
-//
-//                ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
-//
-//                getMongoOperations().save(fieldValue);
-//            }
         }
 
     }
     
     private void checkNSave(Object fieldValue) {
 		FieldCallback callback = new FieldCallback();
-		System.out.println(fieldValue.getClass().toString());
 		ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
 		if (!callback.isIdFound()) {
 			throw new MappingException("Oops, something went wrong. Child doesn't have @Id?");

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jmscott.rest.model.Password;
 import com.jmscott.rest.model.QUser;
+import com.jmscott.rest.auth.CustomUserDetailsService;
 import com.jmscott.rest.exception.ResourceNotFoundException;
 import com.jmscott.rest.model.User;
 import com.jmscott.rest.repository.PasswordRepository;
@@ -39,6 +40,9 @@ public class UserController {
 	
 	@Autowired
 	private PasswordRepository passwordRepository;
+	
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 	
 //	@Autowired
 //	private MongoTemplate mongoTemplate;
@@ -121,37 +125,16 @@ public class UserController {
 		return new ResponseEntity<User>(savedUser, HttpStatus.OK);
 	}
 	
-	@PutMapping(path = "/secret/{id}")
+	@PutMapping(path = "/secret/{userId}")
 	public ResponseEntity<User> updatePassword(
-			@PathVariable String id,
+			@PathVariable String userId,
 			@Validated @RequestBody Password passwordDetails) throws ResourceNotFoundException {
-		User savedUser = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("User not found with id " + id) );
-		passwordRepository.save(passwordDetails);
-		
+		User savedUser = userRepository.findById(userId).orElseThrow( () -> new ResourceNotFoundException("User not found with id " + userId) );
+		passwordDetails.setId(passwordRepository.findByUserId(userId).getId());
+		userDetailsService.savePassword(passwordDetails);	// calls bCrypt first
+		System.out.println(passwordDetails.toString());
 		return new ResponseEntity<User>(savedUser, HttpStatus.OK);
 	}
-	
-//	@PutMapping(path = "/{id}")
-//	public ResponseEntity<String> updateUser(
-//			@PathVariable String id,
-//			@Validated @RequestBody User userDetails) throws ResourceNotFoundException {
-//		Query query = new Query();
-//		Update update = new Update();
-//		
-//		query.addCriteria(Criteria.where("id").is(id));
-//		// all this noise is here because we're not juggling the password on the frontend, and it's coming in as null because of it
-//		update.set("id", id);
-//		update.set("username", userDetails.getUsername());
-//		update.set("person", userDetails.getPerson());
-//		update.set("enabled", userDetails.isEnabled());
-//		update.set("roles", userDetails.getRoles());
-//		if(userDetails.getPassword() != null) {
-//			update.set("password", userDetails.getPassword());
-//		}
-//		User newUser = mongoTemplate.findAndModify(query, update, User.class);
-//
-//		return new ResponseEntity<String>(newUser.getUsername(), HttpStatus.OK);
-//	}
 	
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable String id) throws ResourceNotFoundException {

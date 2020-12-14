@@ -57,7 +57,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		userRepository.save(user);
 		passwordRepository.save(password);
 	}
-
+	
+	public void savePassword(Password password) {
+		password.setPassword(bCryptPasswordEncoder.encode(password.getPassword()));
+		passwordRepository.save(password);
+	}
 
 	public User findUserByUsername(String username) {
 		return userRepository.findByUsername(username);

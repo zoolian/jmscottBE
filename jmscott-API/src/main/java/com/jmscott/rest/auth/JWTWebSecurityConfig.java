@@ -63,6 +63,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/signup").permitAll()
             .antMatchers("/blog/posts").permitAll()
+            .antMatchers("/validate").permitAll()
             //.antMatchers("/dashboard/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and().logout()

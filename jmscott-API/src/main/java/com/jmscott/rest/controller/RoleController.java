@@ -49,7 +49,6 @@ public class RoleController {
 	
 	@PostMapping
 	public ResponseEntity<Void> createRole(@Validated @RequestBody Role role) {
-		//role.setEnabled(true); System.out.println(role.toString());
 		role.setId(null);
 		Role newRole = roleRepository.save(role);
 		

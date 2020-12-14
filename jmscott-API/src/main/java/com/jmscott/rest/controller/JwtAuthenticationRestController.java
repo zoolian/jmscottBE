@@ -89,15 +89,6 @@ public class JwtAuthenticationRestController {
 	  Password password = new Password(savedUser.getId(), user.getPassword());
 	  customUserService.saveUser(savedUser, password);
 	  
-	  System.out.println(password.toString());
-	  System.out.println(savedUser.toString());
-//	  User userExists = customUserService.findUserByUsername(user.getUsername());
-//	  if(userExists != null) {
-//		  return ResponseEntity.status(HttpStatus.CONFLICT).header("Conflicting-User", user.getUsername()).build();
-//	  } else {
-//		  customUserService.saveUser(user);
-//		  return ResponseEntity.ok().build();
-//	  }
 	  return ResponseEntity.ok().build();
   }
   
