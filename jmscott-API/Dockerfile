@@ -1,5 +1,5 @@
-FROM adoptopenjdk/openjdk11:alpine-slim
-VOLUME /tmp
+FROM tomcat:9
 EXPOSE 8080
-ADD target/*.jar app.jar
-ENTRYPOINT [ "sh", "-c", "java -jar /app.jar"]
+RUN rm -rf /usr/local/tomcat/webapps/*
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+CMD ["catalina.sh","run"]

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-12-09T16:31:26Z"
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: jmscott-api
+  name: jmscott-api
+  namespace: default
+  resourceVersion: "1400937"
+  selfLink: /api/v1/namespaces/default/services/jmscott-api
+  uid: f53c6b56-c094-4517-912b-69c3ba2c3b9b
+spec:
+  clusterIP: 10.12.5.174
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30567
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: jmscott-api
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.72.144.184

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jmscott-api
+  name: jmscott-api-deployment-v0.1.1
+  namespace: default
+spec:
+  replicas: 2
+  minReadySeconds: 50
+  selector:
+    matchLabels:
+      app: jmscott-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jmscott-api
+    spec:
+      containers:
+      - image: zoolian/jmscott-api:0.1.1.RELEASE
+        imagePullPolicy: IfNotPresent
+        name: jmscott-api
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jmscott-api
+  name: jmscott-api-service
+  namespace: default
+spec:
+  ports:
+  - nodePort: 30567
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: jmscott-api
+  sessionAffinity: ClientIP #Web app has sessions. Subsequent requests need to hit the same pod.
+  type: LoadBalancer
