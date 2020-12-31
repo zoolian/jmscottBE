@@ -11,10 +11,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import com.jmscott.rest.CascadeSaveMongoEventListener;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 @Configuration
+@EnableEncryptableProperties
 @EnableMongoRepositories(basePackages = "com.jmscott.rest.repository")
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
@@ -25,9 +28,15 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
 	@Override
 	public MongoClient mongoClient() {
-		final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/jmscott");
+		final ConnectionString connectionString = new ConnectionString("mongodb://mongodb-statefulset-0.mongodb-svc:27017/jmscott");
+		final String str = "ENC(YC13/Vl68gVRiX/3LzW1woftmR0TKKeJjyWlT7hn5UE5b4DuGO0RQbJxv1gq89Jn)";
+		final MongoCredential mongoCredential = MongoCredential.createCredential("admin", "admin", str.toCharArray());
+		
+		
 		final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-				.applyConnectionString(connectionString).build();
+				.applyConnectionString(connectionString)
+				.credential(mongoCredential)
+				.build();
 		return MongoClients.create(mongoClientSettings);
 	}
 	

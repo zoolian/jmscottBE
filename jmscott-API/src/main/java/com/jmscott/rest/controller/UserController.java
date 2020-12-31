@@ -53,14 +53,14 @@ public class UserController {
 	@GetMapping
 	@CrossOrigin
 	public List<User> getUsersAll(@RequestParam(required = false) boolean showDisabled) {
-//		QUser qUser = new QUser("user");
-//		BooleanExpression filterByUsername = qUser.username.eq(username);
+		QUser qUser = new QUser("user");
+		BooleanExpression filterById = qUser.id.ne("5fd907ac51ba6208a6783b0a"); // builtin admin account
 //		BooleanExpression filterByEnabled = showDisabled ? null : globalUser.enabled.isTrue();
 //		
-//		List<User> users = (List<User>) this.userRepository.findAll(filterByUsername.and(filterByEnabled));
+		List<User> users = (List<User>) userRepository.findAll(filterById);
 		
-		List<User> u = userRepository.findAll();
-		return u;
+		//List<User> users = userRepository.findAll();
+		return users;
 	}
 	
 	@GetMapping(path = "/username/{username}")	// TODO: add url param for %like
@@ -132,7 +132,6 @@ public class UserController {
 		User savedUser = userRepository.findById(userId).orElseThrow( () -> new ResourceNotFoundException("User not found with id " + userId) );
 		passwordDetails.setId(passwordRepository.findByUserId(userId).getId());
 		userDetailsService.savePassword(passwordDetails);	// calls bCrypt first
-		System.out.println(passwordDetails.toString());
 		return new ResponseEntity<User>(savedUser, HttpStatus.OK);
 	}
 	

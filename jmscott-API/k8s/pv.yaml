@@ -1,0 +1,17 @@
+# When creating a PersistentVolumeClaim object with kubectl apply, K8s dynamically creates a corresponding PersistentVolume object
+# This yaml might only be necessary for changes?? If at all??
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pd-volume
+  #labels:  # for multi-zone configurations
+  #  topology.kubernetes.io/region: "us-central1" 
+  #  topology.kubernetes.io/zone: "us-central1-a"
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - "ReadWriteOnce"
+  gcePersistenDisk:
+    fsType: ext4
+    pdName: gke-jmscott-cluster-default-pool-cd23a3e4-0p3r

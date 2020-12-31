@@ -1,0 +1,26 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mongo-volume
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  fsType: ext4
+# This setting instructs Kubernetes to provision a persistent disk in the same zone that the Pod gets scheduled to.
+# It respects Pod scheduling constraints such as anti-affinity and node selectors. Anti-affinity on zones allows
+# StatefulSet Pods to be spread across zones along with the corresponding disks.
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+spec:
+  storageClassName: mongo-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  #persistentVolumeReclaimPolicy: Delete
+#persistentVolumeReclaimPolicy: Retain  # costs money
