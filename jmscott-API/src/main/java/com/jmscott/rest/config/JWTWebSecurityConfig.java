@@ -1,4 +1,4 @@
-package com.jmscott.rest.auth;
+package com.jmscott.rest.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.jmscott.rest.auth.CustomLogoutSuccessHandler;
+import com.jmscott.rest.auth.JwtTokenAuthorizationOncePerRequestFilter;
+import com.jmscott.rest.auth.JwtUnAuthorizedResponseAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -64,6 +68,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/signup").permitAll()
             .antMatchers("/blog/posts").permitAll()
             .antMatchers("/validate").permitAll()
+            .antMatchers("/security/users/secret/**").permitAll()	// TODO: design alternate authentication based on the temporary url
             //.antMatchers("/dashboard/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and().logout()

@@ -1,9 +1,12 @@
+# Keys and passwords are pulled from a k8s secret, then exported as environment variables. Those
+# env vars are pulled in application.properties in the java project and passed to the mongo connection attributes.
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: jmscott-api
-  name: jmscott-api-deployment-v0.1.1
+  name: jmscott-api
   namespace: default
 spec:
   replicas: 2
@@ -22,9 +25,32 @@ spec:
         app: jmscott-api
     spec:
       containers:
-      - image: zoolian/jmscott-api:0.1.1.RELEASE
+      - image: zoolian/jmscott-api:0.1.2.RELEASE
         imagePullPolicy: IfNotPresent
         name: jmscott-api
+        env:
+          - name: SECRETS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jmscott-api-secret
+                key: spring-jasypt-key
+          - name: SECRETS_PASSWD
+            valueFrom:
+              secretKeyRef:
+                name: jmscott-api-secret
+                key: spring-jasypt-password
+          - name: SECRETS_JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jmscott-api-secret
+                key: jwt-key
+        volumeMounts:
+          - name: config-volume
+            mountPath: /workspace/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: jmscott-api-configmap
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
 ---
@@ -33,7 +59,7 @@ kind: Service
 metadata:
   labels:
     app: jmscott-api
-  name: jmscott-api-service
+  name: jmscott-api-svc
   namespace: default
 spec:
   ports:

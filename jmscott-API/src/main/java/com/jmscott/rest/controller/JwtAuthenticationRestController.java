@@ -4,7 +4,19 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Properties;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +47,13 @@ import com.jmscott.rest.model.Password;
 import com.jmscott.rest.model.User;
 import com.jmscott.rest.model.UserWithPassword;
 import com.jmscott.rest.repository.UserRepository;
+import com.jmscott.rest.service.InstanceInfoService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
 @RestController
 //@RequestMapping(path = "/security")
-@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "http://api.jmscottnovels.com:3001", "http://api.jmscottnovels.com:3000"}, allowCredentials = "true")
 public class JwtAuthenticationRestController {
 
   @Value("${jwt.http.request.header}")
@@ -57,9 +71,12 @@ public class JwtAuthenticationRestController {
   @Autowired
   private UserRepository userRepository;
   
+  @Autowired
+  private InstanceInfoService instanceInfoService;
+     
   @GetMapping
   public ResponseEntity<?> healthCheck() {
-	  return ResponseEntity.ok("{healthy:true}");
+	  return ResponseEntity.ok("{healthy: true, instanceInfo: " + instanceInfoService.retrieveInstanceInfo() + "}");
   }
   
   @PostMapping(value = "${jwt.get.token.uri}")
@@ -92,7 +109,42 @@ public class JwtAuthenticationRestController {
 	  return ResponseEntity.ok().build();
   }
   
-  // TODO: create url mapping for password reset
+  // TODO: test
+  @PostMapping(value = "/reset/{id}")
+  public ResponseEntity<?> passwordResetEmail(@PathVariable String id, @RequestBody String email) throws IOException, MessagingException {
+	  Properties prop = new Properties();	  
+	  prop.put("mail.smtp.auth", true);
+	  prop.put("mail.smtp.starttls.enable", "true");
+	  prop.put("mail.smtp.host", "smtp.mailtrap.io");
+	  prop.put("mail.smtp.port", "25");
+	  prop.put("mail.smtp.ssl.trust", "smtp.mailtrap.io");
+	  
+	  Session session = Session.getInstance(prop, new Authenticator() {
+		  protected PasswordAuthentication getPasswordAuthentication() {
+			  return new PasswordAuthentication("userName", "password");
+		  }
+	  });
+	  
+	  Message message = new MimeMessage(session);
+	  message.setFrom(new InternetAddress(email));
+	  message.setRecipients(
+	    Message.RecipientType.TO, InternetAddress.parse("admin@jmscottnovels.com"));
+	  message.setSubject("reset for UBlog");
+
+	  String msg = "Click <a href=\"jmscottnovels.com/" + id + "\">here</a> to reset your UBlog password";
+
+	  MimeBodyPart mimeBodyPart = new MimeBodyPart();
+	  mimeBodyPart.setContent(msg, "text/html");
+
+	  Multipart multipart = new MimeMultipart();
+	  multipart.addBodyPart(mimeBodyPart);
+
+	  message.setContent(multipart);
+
+	  Transport.send(message);
+	  
+	  return ResponseEntity.ok().build();
+  }
   
 //  @PostMapping(value = "/signup")
 //  public ResponseEntity<?> createUser(@RequestBody User user) {

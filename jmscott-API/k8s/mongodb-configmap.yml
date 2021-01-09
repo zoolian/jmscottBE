@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: mongodb-configmap
 data:
-  database_url: mongodb-statefulset-0.mongodb-svc
+  database_url: mongodb-ss-0.mongodb-svc
 
 # rs.initiate({ _id: "MainRepSet", version: 1,
 #  memebers: [

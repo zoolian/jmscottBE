@@ -1,0 +1,1 @@
+kubectl create configmap jmscott-api-configmap --from-file=..\src\main\resources\application.properties

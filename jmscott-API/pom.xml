@@ -16,7 +16,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>9</java.version>
 	</properties>
 
 	<dependencies>
@@ -105,6 +105,10 @@
 			<groupId>com.spotify</groupId>
 			<artifactId>dockerfile-maven-plugin</artifactId>
 			<version>1.4.13</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
 		</dependency>
 	</dependencies>
 

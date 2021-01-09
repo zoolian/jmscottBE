@@ -32,7 +32,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 
 @RestController
 @RequestMapping(path = "/security/users")
-@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "http://api.jmscottnovels.com:3001", "http://api.jmscottnovels.com:3000"}, allowCredentials = "true")
 public class UserController {
 
 	@Autowired
@@ -66,10 +66,10 @@ public class UserController {
 	@GetMapping(path = "/username/{username}")	// TODO: add url param for %like
 	public ResponseEntity<User> getUserByUsername(@PathVariable String username) throws ResourceNotFoundException {
 		User user = userRepository.getByUsername(username).orElseThrow(
-				() -> new ResourceNotFoundException("User not found: " + username)
-			);
-			
-			return ResponseEntity.ok(user);
+			() -> new ResourceNotFoundException("User not found: " + username)
+		);
+		
+		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping(path = "/lastName/{lastName}")	// FIX ME: like

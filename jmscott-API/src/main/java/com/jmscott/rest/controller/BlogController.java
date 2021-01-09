@@ -25,7 +25,7 @@ import com.jmscott.rest.repository.PostRepository;
 
 @RestController
 @RequestMapping(path = "/blog")
-@CrossOrigin(origins = {"http://localhost:3001", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3001", "http://localhost:3000", "https://security.jmscottnovels.com", "https://blog.jmscottnovels.com"}, allowCredentials = "true")
 public class BlogController {
 	
 	@Autowired

@@ -3,6 +3,7 @@ package com.jmscott.rest.config;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
@@ -26,12 +27,17 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 		return "jmscott";
 	}
 
+	@Value("${spring.data.mongodb.password}")
+	protected String mongoPass;
+	
+	@Value("${spring.data.mongodb.uri}")
+	protected String mongoUrl;
+	
 	@Override
 	public MongoClient mongoClient() {
-		final ConnectionString connectionString = new ConnectionString("mongodb://mongodb-statefulset-0.mongodb-svc:27017/jmscott");
-		final String str = "ENC(YC13/Vl68gVRiX/3LzW1woftmR0TKKeJjyWlT7hn5UE5b4DuGO0RQbJxv1gq89Jn)";
-		final MongoCredential mongoCredential = MongoCredential.createCredential("admin", "admin", str.toCharArray());
-		
+		final ConnectionString connectionString = new ConnectionString(mongoUrl);
+		//final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/jmscott");
+		final MongoCredential mongoCredential = MongoCredential.createCredential("admin", "admin", mongoPass.toCharArray());
 		
 		final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
 				.applyConnectionString(connectionString)
