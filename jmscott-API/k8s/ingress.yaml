@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jmscott-api
+spec:
+  tls:
+  - secretName: api1-jmscottnovels-com-tls
+    hosts:
+    - api1.jmscottnovels.com
+  rules:
+  - host: api1.jmscottnovels.com
+    http:
+      paths:
+      - backend:
+          serviceName: jmscott-api-svc
+          servicePort: 8080

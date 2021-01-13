@@ -53,7 +53,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 @RestController
 //@RequestMapping(path = "/security")
-@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "http://api.jmscottnovels.com:3001", "http://api.jmscottnovels.com:3000"}, allowCredentials = "true")
+@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "https://security.jmscottnovels.com", "https://blog.jmscottnovels.com"}, allowCredentials = "true")
 public class JwtAuthenticationRestController {
 
   @Value("${jwt.http.request.header}")
@@ -109,7 +109,7 @@ public class JwtAuthenticationRestController {
 	  return ResponseEntity.ok().build();
   }
   
-  // TODO: test
+  // TODO: deploy smtp
   @PostMapping(value = "/reset/{id}")
   public ResponseEntity<?> passwordResetEmail(@PathVariable String id, @RequestBody String email) throws IOException, MessagingException {
 	  Properties prop = new Properties();	  

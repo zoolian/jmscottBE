@@ -28,6 +28,9 @@ spec:
       - image: zoolian/jmscott-api:0.1.2.RELEASE
         imagePullPolicy: IfNotPresent
         name: jmscott-api
+        ports:
+        - name: liveness-port
+          containerPort: 8080
         env:
           - name: SECRETS_KEY
             valueFrom:
@@ -47,6 +50,27 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /workspace/config
+        resources:
+          requests:
+            #cpu: 100m
+            memory: 256Mi
+          limits:
+            #cpu: 150m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /
+            port: liveness-port
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60
+        livenessProbe:
+          httpGet:
+            path: /
+            port: liveness-port
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60
       volumes:
         - name: config-volume
           configMap:
@@ -63,11 +87,11 @@ metadata:
   namespace: default
 spec:
   ports:
-  - nodePort: 30567
-    port: 8080
+  #- nodePort: 30567
+  - port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
     app: jmscott-api
   sessionAffinity: ClientIP #Web app has sessions. Subsequent requests need to hit the same pod.
-  type: LoadBalancer
+  #type: ClusterIP

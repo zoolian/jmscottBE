@@ -26,7 +26,7 @@ import com.jmscott.rest.repository.PageRepository;
 
 @RestController
 @RequestMapping(path = "/security/pages")
-@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "http://api1.jmscottnovels.com:3001", "http://api1.jmscottnovels.com:3000"}, allowCredentials = "true")
+@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "https://security.jmscottnovels.com", "https://blog.jmscottnovels.com"}, allowCredentials = "true")
 public class PageController {
 	@Autowired
 	private PageRepository pageRepository;

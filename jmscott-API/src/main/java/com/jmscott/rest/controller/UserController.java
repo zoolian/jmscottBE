@@ -32,7 +32,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 
 @RestController
 @RequestMapping(path = "/security/users")
-@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "http://api.jmscottnovels.com:3001", "http://api.jmscottnovels.com:3000"}, allowCredentials = "true")
+@CrossOrigin(origins= {"http://localhost:3001", "http://localhost:3000", "https://security.jmscottnovels.com", "https://blog.jmscottnovels.com"}, allowCredentials = "true")
 public class UserController {
 
 	@Autowired
