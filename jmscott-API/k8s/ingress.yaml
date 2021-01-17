@@ -2,11 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jmscott-api
+  annotations:
+    #kubernetes.io/ingress.global-static-ip-name: address-name  ##gcloud compute addresses create address-name --global
+    networking.gke.io/managed-certificates: api1-jmscottnovels-com-tls
 spec:
-  tls:
-  - secretName: api1-jmscottnovels-com-tls
-    hosts:
-    - api1.jmscottnovels.com
+  # tls:
+  # - secretName: api1-jmscottnovels-com-tls
+  #   hosts:
+  #   - api1.jmscottnovels.com
   rules:
   - host: api1.jmscottnovels.com
     http:

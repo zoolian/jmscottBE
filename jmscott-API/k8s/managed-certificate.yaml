@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: api1-jmscottnovels-com-tls
+spec:
+  domains:
+    - api1.jmscottnovels.com

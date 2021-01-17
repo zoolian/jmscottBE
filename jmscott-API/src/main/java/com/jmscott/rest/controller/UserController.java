@@ -44,12 +44,6 @@ public class UserController {
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 	
-//	@Autowired
-//	private MongoTemplate mongoTemplate;
-	
-	//private QUser globalUser = new QUser("globalUser");
-	//private BooleanExpression filterByEnabled = globalUser.enabled.isTrue();
-	
 	@GetMapping
 	@CrossOrigin
 	public List<User> getUsersAll(@RequestParam(required = false) boolean showDisabled) {
@@ -59,7 +53,6 @@ public class UserController {
 //		
 		List<User> users = (List<User>) userRepository.findAll(filterById);
 		
-		//List<User> users = userRepository.findAll();
 		return users;
 	}
 	
@@ -100,7 +93,7 @@ public class UserController {
 			() -> new ResourceNotFoundException("User not found with id " + id)
 		);
 		
-		return ResponseEntity.ok(user);	// .ok().build(user)
+		return ResponseEntity.ok(user);
 	}
 	
 	@PostMapping
