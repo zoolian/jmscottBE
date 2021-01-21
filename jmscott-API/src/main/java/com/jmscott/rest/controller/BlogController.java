@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.jmscott.rest.exception.ResourceNotFoundException;
 import com.jmscott.rest.model.Post;
 import com.jmscott.rest.repository.PostRepository;
+import com.jmscott.rest.repository.UserRepository;
 
 @RestController
 @RequestMapping(path = "/blog")
@@ -31,11 +32,13 @@ public class BlogController {
 	@Autowired
 	private PostRepository postRepository;
 	
-//	@Autowired
-//	private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
 	@GetMapping(path = "/posts/user/{id}")
-	public List<Post> getPostsByUser (@PathVariable String id) {
+	public List<Post> getPostsByUser (@PathVariable String id) throws ResourceNotFoundException {
+		userRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("No user with id: " + id));
 		return postRepository.findByUserId(id);
 	}
 	

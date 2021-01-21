@@ -68,6 +68,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/signup").permitAll()
             .antMatchers("/blog/posts").permitAll()
             .antMatchers("/validate").permitAll()
+            .antMatchers("/logout").permitAll()
             .antMatchers("/security/users/secret/**").permitAll()	// TODO: design alternate authentication based on the temporary url
             //.antMatchers("/dashboard/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()

@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - image: zoolian/jmscott-api:0.1.3.RELEASE
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: jmscott-api
         ports:
         - name: liveness-port
@@ -50,13 +50,13 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /workspace/config
-        resources:
-          requests:
-            cpu: 100m
-            memory: 32Mi
-          limits:
-            cpu: 150m
-            memory: 128Mi
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 65Mi
+        #   limits:
+        #     cpu: 150m
+        #     memory: 512Mi
         readinessProbe:
           httpGet:
             path: /
