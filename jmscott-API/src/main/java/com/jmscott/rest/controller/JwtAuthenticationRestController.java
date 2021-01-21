@@ -93,9 +93,9 @@ public class JwtAuthenticationRestController {
     sessionCookie.setHttpOnly(true);
     sessionCookie.setMaxAge(7 * 24 * 60 * 60);
     // TODO: enable once https is established
-    //sessionCookie.setSecure(true);
+    sessionCookie.setSecure(true);
     response.addCookie(sessionCookie);
-    
+    System.out.println(sessionCookie.getMaxAge());
     return ResponseEntity.ok(new JwtTokenResponse(token, tokenDate));
   }
   

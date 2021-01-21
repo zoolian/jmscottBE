@@ -74,7 +74,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
             .and().logout()
             //.addLogoutHandler(new CustomLogoutHandler())
-            .logoutSuccessHandler(new CustomLogoutSuccessHandler()).deleteCookies("authenticationToken").invalidateHttpSession(false).logoutSuccessUrl("/");
+            .logoutSuccessHandler(new CustomLogoutSuccessHandler()).deleteCookies("authenticationToken").invalidateHttpSession(true).logoutSuccessUrl("/");
 
        httpSecurity
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);

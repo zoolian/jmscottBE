@@ -19,8 +19,6 @@ public class JwtUnAuthorizedResponseAuthenticationEntryPoint implements Authenti
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-        "You would need to provide the Jwt Token to Access This resource");
+        "You would need to provide the Jwt Token to access this resource");
   }
 }
-
-
