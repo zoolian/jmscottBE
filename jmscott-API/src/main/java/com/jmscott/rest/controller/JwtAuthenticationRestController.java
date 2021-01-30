@@ -3,6 +3,7 @@ package com.jmscott.rest.controller;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -43,9 +44,13 @@ import com.jmscott.rest.auth.JwtTokenUtil;
 import com.jmscott.rest.auth.resource.AuthenticationException;
 import com.jmscott.rest.auth.resource.JwtTokenRequest;
 import com.jmscott.rest.auth.resource.JwtTokenResponse;
+import com.jmscott.rest.exception.ResourceNotFoundException;
+import com.jmscott.rest.model.Page;
 import com.jmscott.rest.model.Password;
+import com.jmscott.rest.model.Role;
 import com.jmscott.rest.model.User;
 import com.jmscott.rest.model.UserWithPassword;
+import com.jmscott.rest.repository.PageRepository;
 import com.jmscott.rest.repository.UserRepository;
 import com.jmscott.rest.service.InstanceInfoService;
 
@@ -73,6 +78,9 @@ public class JwtAuthenticationRestController {
   
   @Autowired
   private InstanceInfoService instanceInfoService;
+  
+  @Autowired
+  private PageRepository pageRespository;
      
   @GetMapping
   public ResponseEntity<?> healthCheck() {
@@ -93,7 +101,7 @@ public class JwtAuthenticationRestController {
     sessionCookie.setHttpOnly(true);
     sessionCookie.setMaxAge(7 * 24 * 60 * 60);
     // TODO: enable once https is established
-    sessionCookie.setSecure(true);
+    //sessionCookie.setSecure(true);
     response.addCookie(sessionCookie);
     System.out.println(sessionCookie.getMaxAge());
     return ResponseEntity.ok(new JwtTokenResponse(token, tokenDate));
@@ -201,6 +209,30 @@ public class JwtAuthenticationRestController {
 	  return ResponseEntity.ok(username);
   }
 
+  @GetMapping(value = "/validate-page-access/{pageId}/{userId}")
+  public ResponseEntity<?> validatePageAccess(@PathVariable String pageId, @PathVariable String userId) throws ResourceNotFoundException {
+	boolean access = false;
+	Page page = pageRespository.findById(pageId).orElseThrow(
+			() -> new ResourceNotFoundException("Page not found with id " + pageId)
+		);
+	
+	User user = userRepository.findById(userId).orElseThrow(
+			() -> new ResourceNotFoundException("User not found with id " + userId)
+		);
+	
+	List<Role> pageRoles = page.getRoles();
+	List<Role> userRoles = (List<Role>) user.getRoles();
+	
+	for(Role userRole : userRoles) {
+		for(Role pageRole : pageRoles) {
+			if(pageRole.getId().equals(userRole.getId())) {				
+				access = true;
+			}
+		}
+	}
+	return ResponseEntity.ok(access);
+  }
+  
   @ExceptionHandler({ AuthenticationException.class })
   public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

@@ -52,7 +52,7 @@ public class RoleController {
 		role.setId(null);
 		Role newRole = roleRepository.save(role);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id/{id}")
 				.buildAndExpand(newRole.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}

@@ -103,7 +103,7 @@ public class UserController {
 		
 		User newUser = userRepository.save(user);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id/{id}")
 				.buildAndExpand(newUser.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}

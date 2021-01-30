@@ -67,7 +67,7 @@ public class BlogController {
 		post.setHidden(false);
 		Post newPost = postRepository.save(post);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id/{id}")
 			.buildAndExpand(newPost.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}

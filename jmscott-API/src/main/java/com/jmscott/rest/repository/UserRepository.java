@@ -1,11 +1,13 @@
 package com.jmscott.rest.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import com.jmscott.rest.model.Role;
 import com.jmscott.rest.model.User;
 
 @Repository
@@ -23,7 +25,8 @@ public interface UserRepository extends MongoRepository<User, String>, QuerydslP
 	Optional<User> getByUsername(String username);
 	User findByUsername(String username);
 
-	Optional<User> getById(String id);
+	//Optional<User> findById(String id);
+	List<Role> getRolesById(String userId);
 	
 //	List<User> findByNameLikeOrderByAgeAsc(String name);
 //

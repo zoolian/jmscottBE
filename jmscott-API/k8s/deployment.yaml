@@ -76,7 +76,7 @@ spec:
           configMap:
             name: jmscott-api-configmap
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: 30 #increase if pod takes longer than this to shut down
 ---
 apiVersion: v1
 kind: Service

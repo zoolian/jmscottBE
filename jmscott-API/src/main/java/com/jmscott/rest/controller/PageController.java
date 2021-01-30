@@ -52,7 +52,7 @@ public class PageController {
 		page.setId(null);
 		Page newPage = pageRepository.save(page);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/id/{id}")
 				.buildAndExpand(newPage.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
